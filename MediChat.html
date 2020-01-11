@@ -80,53 +80,23 @@
         }
     </style>
     <script type="text/javascript">
-        function sendMessage(talkwords) {
+        function sendMessage() {
             var request = new XMLHttpRequest()
-            request.open('GET', 'localhost:5000/' + talkwords, true)
+            var talk_words = document.getElementById("talkwords")
+            request.open('GET', 'http://localhost:5000/' + talk_words.value + '/0', true)
 
             request.onload = function() {
                 var data = JSON.parse(this.response)
+                console.log(data)
                 if (request.status >= 200 && request.status < 400) {
-                    data.forEach(res => {
-                        console.log(res.answer)
-                    })
+                    console.log(data.answer)
                 } else {
                     console.log('error')
                 }
+
             }
+
             request.send()
-        }
-
-        data.forEach(res => {
-            const answer = document.createElement('p')
-            answer.textContent = res.answer
-
-            var medianswer = '<div class="meditalk"><span>' + answer + '</span></div>';
-        })
-
-
-        window.onload = function() {
-            var Words = document.getElementById("words");
-            var TalkWords = document.getElementById("talkwords");
-            var TalkSub = document.getElementById("talksub");
-            var mediresponse = document.getElementByID("mediresponse");
-
-
-            TalkSub.onclick = function() {
-                //Empty string
-                var str = "";
-                if (TalkWords.value == "") {
-                    //Empty alert
-                    alert("Empty message");
-                    return;
-                }
-
-                sendMessage(TalkWords.value)
-                str = '<div class="humantalk"><span>' + TalkWords.value + '</span></div>';
-                Words.innerHTML = Words.innerHTML + str;
-
-            }
-
         }
     </script>
 </head>
@@ -140,7 +110,7 @@
         </div>
         <div class="talk_input">
             <input type="text" class="talk_word" id="talkwords">
-            <input type="button" value="Send" class="talk_sub" id="talksub">
+            <input type="button" value="Send" class="talk_sub" id="talksub" onClick="sendMessage()">
         </div>
     </div>
 </body>
