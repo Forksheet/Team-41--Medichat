@@ -80,28 +80,28 @@
         }
     </style>
     <script type="text/javascript">
-        var request = new XMLHttpRequest()
-        request.open('GET', 'localhost:5000/' + , true)
-        request.onload = function() {
-            var data = JSON.parse(this.response)
-            if (request.status >= 200 && request.status < 400) {
-                data.forEach(res => {
-                    console.log(res.answer)
-                })
-            } else {
-                console.log('error')
+        function sendMessage(talkwords) {
+            var request = new XMLHttpRequest()
+            request.open('GET', 'localhost:5000/' + talkwords, true)
+
+            request.onload = function() {
+                var data = JSON.parse(this.response)
+                if (request.status >= 200 && request.status < 400) {
+                    data.forEach(res => {
+                        console.log(res.answer)
+                    })
+                } else {
+                    console.log('error')
+                }
             }
+            request.send()
         }
-        request.send()
+
         data.forEach(res => {
             const answer = document.createElement('p')
             answer.textContent = res.answer
 
             var medianswer = '<div class="meditalk"><span>' + answer + '</span></div>';
-
-
-
-
         })
 
 
@@ -120,6 +120,8 @@
                     alert("Empty message");
                     return;
                 }
+
+                sendMessage(TalkWords.value)
                 str = '<div class="humantalk"><span>' + TalkWords.value + '</span></div>';
                 Words.innerHTML = Words.innerHTML + str;
 
