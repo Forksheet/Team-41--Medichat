@@ -13,7 +13,7 @@
             height: 500px;
             border: 1px solid #666;
             margin: 50px auto 0;
-            background: #f9f9f9;
+            background: #208192;
         }
         
         .talk_show {
@@ -80,22 +80,46 @@
         }
     </style>
     <script type="text/javascript">
-        function sendMessage() {
+        //
+        window.onload = function() {
+            var Words = document.getElementById("words");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+
+            TalkSub.onclick = function() {
+                var str = "";
+                if (TalkWords.value == "") {
+                    //Empty alert
+                    alert("message could not be empty");
+                    return;
+                } else {
+                    str = '<div class="humantalk"><span>' + TalkWords.value + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + str;
+                }
+                sendRequest();
+            }
+        }
+
+        function sendRequest() {
             var request = new XMLHttpRequest()
             var talk_words = document.getElementById("talkwords")
+            var Words = document.getElementById("words");
             request.open('GET', 'http://localhost:5000/' + talk_words.value + '/0', true)
 
             request.onload = function() {
                 var data = JSON.parse(this.response)
+                var answer = "";
                 console.log(data)
                 if (request.status >= 200 && request.status < 400) {
                     console.log(data.answer)
+                    answer = '<div class="meditalk"><span>' + data.answer.value + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + answer;
                 } else {
                     console.log('error')
+                    answer = '<div class="meditalk"><span>' + 'error' + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + answer;
                 }
-
             }
-
             request.send()
         }
     </script>
@@ -110,7 +134,7 @@
         </div>
         <div class="talk_input">
             <input type="text" class="talk_word" id="talkwords">
-            <input type="button" value="Send" class="talk_sub" id="talksub" onClick="sendMessage()">
+            <input type="button" value="Send" class="talk_sub" id="talksub">
         </div>
     </div>
 </body>
