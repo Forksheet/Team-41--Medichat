@@ -47,6 +47,13 @@
             text-indent: 10px;
         }
         
+        .quiz_sub {
+            width: 56px;
+            height: 30px;
+            float: left;
+            margin-left: 5px;
+        }
+        
         .talk_sub {
             width: 56px;
             height: 30px;
@@ -85,6 +92,11 @@
             var Words = document.getElementById("words");
             var TalkWords = document.getElementById("talkwords");
             var TalkSub = document.getElementById("talksub");
+            var QuizSub = document.getElementById("quizsub");
+
+            QuizSub.onclick = function() {
+                window.location = 'quiz.html'
+            }
 
             TalkSub.onclick = function() {
                 var str = "";
@@ -112,7 +124,7 @@
                 console.log(data)
                 if (request.status >= 200 && request.status < 400) {
                     console.log(data.answer)
-                    answer = '<div class="meditalk"><span>' + data.answer.value + '</span></div>';
+                    answer = '<div class="meditalk"><span>' + data.answer + '</span></div>';
                     Words.innerHTML = Words.innerHTML + answer;
                 } else {
                     console.log('error')
@@ -135,6 +147,7 @@
         <div class="talk_input">
             <input type="text" class="talk_word" id="talkwords">
             <input type="button" value="Send" class="talk_sub" id="talksub">
+            <input type="button" value="Quiz" class="quiz_sub" id="quizsub">
         </div>
     </div>
 </body>
