@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+      .talk_con {
+            width: 600px;
+            height: 560px;
+            border: 1px solid #666;
+            margin: 50px auto 0;
+            background: #f9f9f9;
+        }
+      .talk_show {
+            width: 580px;
+            height: 490px;
+            border: 1px solid #666;
+            background: #fff;
+            margin: 10px auto 0;
+            overflow: auto;
+        }
+       .meditalk {
+           margin: 10px;
+       }
+        
+       .meditalk span {
+           display: inline-block;
+           background: #0181cc;
+           border-radius: 10px;
+           color: #fff;
+           padding: 5px 10px;
+        }
+      
+        .medianswer span {
+           display: inline-block;
+           background: #0181cc;
+           border-radius: 10px;
+           color: #fff;
+           padding: 5px 10px;
+           margin: 10px;
+           visibility: hidden;
+        }
+        
+        .humantalk {
+           margin: 10px;
+           text-align: right;
+        }
+        
+        .humantalk span {
+            display: inline-block;
+            background: #50af68;
+            border-radius: 10px;
+            color: #fff;
+            padding: 5px 10px;
+        }
+        #showanswer{
+            font-size: 16px;
+            background-color: #279;
+            color: #fff;
+            border: 0px;
+            border-radius: 3px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .question{
+          font-size: 30px;
+          margin-bottom: 10px;
+        }
+        .container{
+          position:relative;
+          display: flex;
+          flex-flow:column nowrap;
+          width: 580px;
+          height: 160px;
+          background:#fff;
+          bottom: -210px;
+        }
+        .parent1{
+            display: flex;
+            flex-flow:row nowrap;
+            flex:1 1 0;
+            text-align: center;
+        }
+        .container .parent1:first-child{margin-bottom: 5px;}
+        #item1{
+            flex:1 1 0;
+            font-size: 16px;
+            color: #fff;
+            background: #033BFF;
+            visibility: visible;
+        }
+        #item2{
+            flex:1 1 0;
+            font-size: 16px;
+            color: #fff;
+            background: #FF0303;
+            visibility: visible;
+        }
+        .parent1 .item1:first-child{margin-right: 5px;}
+      
+        .parent2{
+            display: flex;
+            flex-flow:row nowrap;
+            flex:1 1 0;
+            text-align: center;
+        }
+        .container .parent2:first-child{margin-bottom: 5px;}
+        #item3{
+            flex:1 1 0;
+            font-size: 16px;
+            background: #32BF2F;
+            color: #fff;
+            visibility: visible;
+        }
+        #item4{
+            flex:1 1 0;
+            font-size: 16px;
+            background: #FFB803;
+            color: #fff;
+            visibility: visible;
+        }
+        .parent2 .item3:first-child{margin-right: 5px;}
+
+      </style>
+    <script type="text/javascript">
+      window.onload=function(){
+        const mText = document.getElementById("msay");
+        const manswer = document.getElementById("answer");
+        const item1Button = document.getElementById("item1");
+        const item2Button = document.getElementById("item2");
+        const item3Button = document.getElementById("item3");
+        const item4Button = document.getElementById("item4");
+        const viewButton = document.getElementById("showanswer");
+
+
+let currentQuestion = {};
+let acceptingAnswers = false;
+let questions = [];
+
+
+fetch("http://127.0.0.1:5000/quiz/sepsis")
+  .then(res => {
+    return res.json();
+  })
+  .then(loadedQuestions => {
+    console.log(loadedQuestions);
+    questions = loadedQuestions;
+    getNewQuestion();
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+  getNewQuestion = () => {
+    
+    currentQuestion = questions[0];
+    mText.innerText = currentQuestion.question;
+    item1Button.innerText = currentQuestion["choice1"];
+    item2Button.innerText = currentQuestion["choice2"];
+    item3Button.innerText = currentQuestion["choice3"];
+    item4Button.innerText = currentQuestion["choice4"];
+    const answer = currentQuestion["correct"];
+    function Button1result (){
+      if (answer == "1") {
+          item1Button.style.color = "lightgreen";
+        }else
+          item1Button.style.color = "red";
+    }
+    item1Button.addEventListener("click", Button1result);
+    
+    function Button2result (){
+      if (answer == "2") {
+          item2Button.style.color = "lightgreen";
+        }else
+          item2Button.style.color = "red";
+       }
+    item2Button.addEventListener("click", Button2result);
+    
+    function Button3result (){
+      if (answer == "3") {
+          item3Button.style.color = "lightgreen";
+        }else
+          item3Button.style.color = "red";
+       }
+    item3Button.addEventListener("click", Button3result);
+    
+    function Button4result (){
+      if (answer == "4") {
+          item4Button.style.color = "lightgreen";
+        }else
+          item4Button.style.color = "red";
+       }
+    item4Button.addEventListener("click", Button4result);
+    
+    function viewresult (){
+      if (answer == "1") {
+          manswer.style.visibility = "visible";
+          manswer.innerText = currentQuestion["choice1"];
+          item1Button.style.visibility = "hidden";
+          item2Button.style.visibility = "hidden";
+          item3Button.style.visibility = "hidden";
+          item4Button.style.visibility = "hidden";
+          return;
+      }
+      
+      if (answer == "2") {
+          manswer.style.visibility = "visible";
+          manswer.innerText = currentQuestion["choice2"];
+          item2Button.style.color = "lightgreen";
+          item3Button.style.visibility = "hidden";
+          item4Button.style.visibility = "hidden";
+          item1Button.style.visibility = "hidden";
+          return;
+      }
+      
+      if (answer == "3") {
+          manswer.style.visibility = "visible";
+          manswer.innerText = currentQuestion["choice3"];
+          item3Button.style.color = "lightgreen";
+          item4Button.style.visibility = "hidden";
+          item1Button.style.visibility = "hidden";
+          item2Button.style.visibility = "hidden";
+          return;
+      }
+      
+      if (answer == "4") {
+          manswer.style.visibility = "visible";
+          manswer.innerText = currentQuestion["choice4"];
+          item4Button.style.color = "lightgreen";
+          item3Button.style.visibility = "hidden";
+          item2Button.style.visibility = "hidden";
+          item1Button.style.visibility = "hidden";
+      }
+    }
+    viewButton.addEventListener("click", viewresult);
+  };
+        }
+
+  </script>
+  </head>
+  <body>
+    <div class="talk_con">
+        <button id="showanswer">View Answer</button>
+        <div class="talk_show" id="words">
+            <div class="meditalk"><span id="msay"></span></div>
+            <div class="humantalk"><span id="hsay">......</span></div>
+            <div class="medianswer"><span id="answer"></span></div>
+          <div class="container" >
+              <div class="parent1">
+                  <button id="item1"></button>
+                  <button id="item2"></button>
+              </div>
+              <div class="parent2">
+                  <button id="item3"></button>
+                  <button id="item4"></button>
+              </div>
+          </div>
+        </div>
+     
+    </div>
+</body>
+</html>
