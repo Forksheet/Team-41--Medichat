@@ -67,9 +67,26 @@
             cursor: pointer;
             margin: 10px;
         }
-        .question{
-          font-size: 30px;
-          margin-bottom: 10px;
+        #showquestion{
+            font-size: 16px;
+            background-color: #279;
+            color: #fff;
+            border: 0px;
+            border-radius: 3px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #Next{
+            font-size: 16px;
+            background-color: #279;
+            color: #fff;
+            border: 0px;
+            border-radius: 3px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px;
+            margin-left: 180px;
         }
         .container{
           position:relative;
@@ -136,116 +153,142 @@
         const item3Button = document.getElementById("item3");
         const item4Button = document.getElementById("item4");
         const viewButton = document.getElementById("showanswer");
+        const reviewButton = document.getElementById("showquestion");
+        const nextButton = document.getElementById("Next");
+        
+        var index = 0;
 
+        let currentQuestion = {};
+        let acceptingAnswers = false;
+        let questions = [];
 
-let currentQuestion = {};
-let acceptingAnswers = false;
-let questions = [];
-
-
-fetch("http://127.0.0.1:5000/quiz/sepsis")
-  .then(res => {
-    return res.json();
-  })
-  .then(loadedQuestions => {
-    console.log(loadedQuestions);
-    questions = loadedQuestions;
-    getNewQuestion();
-  })
-  .catch(err => {
-    console.error(err);
-  });
-
-  getNewQuestion = () => {
-    
-    currentQuestion = questions[0];
-    mText.innerText = currentQuestion.question;
-    item1Button.innerText = currentQuestion["choice1"];
-    item2Button.innerText = currentQuestion["choice2"];
-    item3Button.innerText = currentQuestion["choice3"];
-    item4Button.innerText = currentQuestion["choice4"];
-    const answer = currentQuestion["correct"];
-    function Button1result (){
-      if (answer == "1") {
-          item1Button.style.color = "lightgreen";
-        }else
-          item1Button.style.color = "red";
-    }
-    item1Button.addEventListener("click", Button1result);
-    
-    function Button2result (){
-      if (answer == "2") {
-          item2Button.style.color = "lightgreen";
-        }else
-          item2Button.style.color = "red";
-       }
-    item2Button.addEventListener("click", Button2result);
-    
-    function Button3result (){
-      if (answer == "3") {
-          item3Button.style.color = "lightgreen";
-        }else
-          item3Button.style.color = "red";
-       }
-    item3Button.addEventListener("click", Button3result);
-    
-    function Button4result (){
-      if (answer == "4") {
-          item4Button.style.color = "lightgreen";
-        }else
-          item4Button.style.color = "red";
-       }
-    item4Button.addEventListener("click", Button4result);
-    
-    function viewresult (){
-      if (answer == "1") {
-          manswer.style.visibility = "visible";
-          manswer.innerText = currentQuestion["choice1"];
-          item1Button.style.visibility = "hidden";
-          item2Button.style.visibility = "hidden";
-          item3Button.style.visibility = "hidden";
-          item4Button.style.visibility = "hidden";
-          return;
-      }
-      
-      if (answer == "2") {
-          manswer.style.visibility = "visible";
-          manswer.innerText = currentQuestion["choice2"];
-          item2Button.style.color = "lightgreen";
-          item3Button.style.visibility = "hidden";
-          item4Button.style.visibility = "hidden";
-          item1Button.style.visibility = "hidden";
-          return;
-      }
-      
-      if (answer == "3") {
-          manswer.style.visibility = "visible";
-          manswer.innerText = currentQuestion["choice3"];
-          item3Button.style.color = "lightgreen";
-          item4Button.style.visibility = "hidden";
-          item1Button.style.visibility = "hidden";
-          item2Button.style.visibility = "hidden";
-          return;
-      }
-      
-      if (answer == "4") {
-          manswer.style.visibility = "visible";
-          manswer.innerText = currentQuestion["choice4"];
-          item4Button.style.color = "lightgreen";
-          item3Button.style.visibility = "hidden";
-          item2Button.style.visibility = "hidden";
-          item1Button.style.visibility = "hidden";
-      }
-    }
-    viewButton.addEventListener("click", viewresult);
-  };
+        fetch("http://127.0.0.1:5000/quiz/sepsis")
+          .then(res => {
+            return res.json();
+          })
+          .then(loadedQuestions => {
+            console.log(loadedQuestions);
+            questions = loadedQuestions;
+            getNewQuestion();
+          })
+          .catch(err => {
+            console.error(err);
+          });
+        
+        review = () =>{
+          manswer.style.visibility = "hidden";
+          item1Button.style.visibility = "visible";
+          item2Button.style.visibility = "visible";
+          item3Button.style.visibility = "visible";
+          item4Button.style.visibility = "visible";
+          item1Button.style.color = "white";
+          item2Button.style.color = "white";
+          item3Button.style.color = "white";
+          item4Button.style.color = "white";
         }
+        reviewButton.addEventListener("click", review);
+        
+        getNext = () =>{
+          item1Button.style.color = "white";
+          item2Button.style.color = "white";
+          item3Button.style.color = "white";
+          item4Button.style.color = "white";
+          getNewQuestion();
+        }
+        nextButton.addEventListener("click", getNext);
+  
+        getNewQuestion = () => {
+          currentQuestion = questions[index];
+          index++;
+          mText.innerText = currentQuestion.question;
+          item1Button.innerText = currentQuestion["choice1"];
+          item2Button.innerText = currentQuestion["choice2"];
+          item3Button.innerText = currentQuestion["choice3"];
+          item4Button.innerText = currentQuestion["choice4"];
+          const answer = currentQuestion["correct"];
+          function Button1result (){
+            if (answer == "1") {
+                item1Button.style.color = "lightgreen";
+              }else
+                item1Button.style.color = "red";
+          }
+          item1Button.addEventListener("click", Button1result);
+
+          function Button2result (){
+            if (answer == "2") {
+                item2Button.style.color = "lightgreen";
+              }else
+                item2Button.style.color = "red";
+             }
+          item2Button.addEventListener("click", Button2result);
+
+          function Button3result (){
+            if (answer == "3") {
+                item3Button.style.color = "lightgreen";
+              }else
+                item3Button.style.color = "red";
+             }
+          item3Button.addEventListener("click", Button3result);
+
+          function Button4result (){
+            if (answer == "4") {
+                item4Button.style.color = "lightgreen";
+              }else
+                item4Button.style.color = "red";
+             }
+          item4Button.addEventListener("click", Button4result);
+
+          function viewresult (){
+            if (answer == "1") {
+                manswer.style.visibility = "visible";
+                manswer.innerText = currentQuestion["choice1"];
+                item1Button.style.visibility = "hidden";
+                item2Button.style.visibility = "hidden";
+                item3Button.style.visibility = "hidden";
+                item4Button.style.visibility = "hidden";
+                return;
+            }
+
+            if (answer == "2") {
+                manswer.style.visibility = "visible";
+                manswer.innerText = currentQuestion["choice2"];
+                item2Button.style.color = "lightgreen";
+                item3Button.style.visibility = "hidden";
+                item4Button.style.visibility = "hidden";
+                item1Button.style.visibility = "hidden";
+                return;
+            }
+
+            if (answer == "3") {
+                manswer.style.visibility = "visible";
+                manswer.innerText = currentQuestion["choice3"];
+                item3Button.style.color = "lightgreen";
+                item4Button.style.visibility = "hidden";
+                item1Button.style.visibility = "hidden";
+                item2Button.style.visibility = "hidden";
+                return;
+            }
+
+            if (answer == "4") {
+                manswer.style.visibility = "visible";
+                manswer.innerText = currentQuestion["choice4"];
+                item4Button.style.color = "lightgreen";
+                item3Button.style.visibility = "hidden";
+                item2Button.style.visibility = "hidden";
+                item1Button.style.visibility = "hidden";
+            }
+          }
+          viewButton.addEventListener("click", viewresult);
+        };
+      }
 
   </script>
   </head>
   <body>
     <div class="talk_con">
         <button id="showanswer">View Answer</button>
+        <button id="showquestion">Review Question</button>
+        <button id="Next">Next Question</button>
         <div class="talk_show" id="words">
             <div class="meditalk"><span id="msay"></span></div>
             <div class="humantalk"><span id="hsay">......</span></div>
