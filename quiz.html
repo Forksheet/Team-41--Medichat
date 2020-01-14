@@ -185,7 +185,7 @@
             let acceptingAnswers = false;
             let questions = [];
 
-            fetch("http://127.0.0.1:5000/quiz/sepsis")
+            fetch("https://flask-backend.azurewebsites.net/quiz/sepsis")
                 .then(res => {
                     return res.json();
                 })

@@ -121,7 +121,7 @@
             var request = new XMLHttpRequest()
             var talk_words = document.getElementById("talkwords")
             var Words = document.getElementById("words");
-            request.open('GET', 'http://localhost:5000/' + talk_words.value + '/0', true)
+            request.open('GET', 'https://flask-backend.azurewebsites.net/' + talk_words.value + '/0', true)
 
             request.onload = function() {
                 var data = JSON.parse(this.response)
